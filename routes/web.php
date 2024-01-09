@@ -20,6 +20,7 @@ use Inertia\Inertia;
 Route::get('/', [TrackController::class,'index'])->name('track.index');
 
 Route::get('/track/create', [TrackController::class, 'create'])->name('track.create');
+Route::post('/track', [TrackController::class, 'store'])->name('track.store');
 
 Route::middleware([
     'auth:sanctum',
