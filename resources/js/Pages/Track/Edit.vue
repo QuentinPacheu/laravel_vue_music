@@ -29,27 +29,6 @@
                     <p class="text-red-500 text-xs italic">{{ form.errors.artist }}</p>
                 </div>
                 <div class="mb-3">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
-                        Miniature
-                    </label>
-                    <input 
-                    @input="form.image = $event.target.files[0]"
-                    id="image"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        :class="{ 'border-red-500': form.errors.image }" type="file" placeholder="Image">
-                    <p class="text-red-500 text-xs italic">{{ form.errors.image }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="music">
-                        Musique
-                    </label>
-                    <input id="music"
-                    @input="form.music = $event.target.files[0]"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        :class="{ 'border-red-500': form.errors.music }" type="file" placeholder="Music">
-                    <p class="text-red-500 text-xs italic">{{ form.errors.music }}</p>
-                </div>
-                <div class="mb-3">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                         Afficher
                     </label>
@@ -62,7 +41,7 @@
                 <input 
                 type="submit"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all" 
-                value="Créer la musique">
+                value="Modifier la musique">
             </form>
         
         </template>
@@ -78,17 +57,19 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                title: '',
-                artist: '',
-                image: null,
-                music: null,
-                display: true,
+                title: this.track.title,
+                artist: this.track.artist,
+                display: this.track.display ? true : false,
             }),
         }
     },
+    props: {
+        track:Object,
+    },
+
     methods:{
         submit() {
-            this.form.post(route('track.store'))
+            this.form.put(route('track.update', { track: this.track}));
         }
     }
 }
