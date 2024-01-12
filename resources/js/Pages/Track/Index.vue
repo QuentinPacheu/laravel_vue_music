@@ -1,38 +1,34 @@
 <template>
     <MusicLayout>
         <template #title>
-            Tracks
+            <h1 class="text-4xl font-bold text-blue-600">Tracks</h1>
         </template>
         <template #action>
-            <Link
-            v-if="$page.props.isAdmin"
-                :href="route('track.create')"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all"
-            >
-                Créer une musique
+            <Link v-if="$page.props.isAdmin" :href="route('track.create')" class="btn-create-track">
+            Créer une musique
             </Link>
         </template>
         <template #content>
             <div class="my-4">
-                <input v-model="search" type="search" name="search" id="search" class="border p-2 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3">
+                <input v-model="search" type="search" name="search" id="search"
+                    class="border p-2 rounded-md w-full md:w-2/3 lg:w-1/2 xl:w-1/3 placeholder-gray-500 focus:outline-none focus:ring focus:border-blue-300"
+                    placeholder="Rechercher une musique..." />
                 <div class="flex flex-col mt-4 gap-4">
-                    <Track v-for="track in filteredTracks" 
-                    :key="track.uuid" 
-                    :track="track" :active="currentTrack == track.uuid" 
-                    @click="playAudio(track)" />
+                    <Track v-for="track in filteredTracks" :key="track.uuid" :track="track"
+                        :active="currentTrack == track.uuid" @click="playAudio(track)" />
                 </div>
                 <div v-if="filteredTracks.length === 0" class="text-center text-gray-600 mt-4">
-                Aucun résultat trouvé.
+                    Aucun résultat trouvé.
                 </div>
             </div>
         </template>
     </MusicLayout>
 </template>
-
+  
 <script>
-    import MusicLayout from "@/Layouts/MusicLayout.vue";
-    import { Link } from "@inertiajs/vue3";
-    import Track from "@/Components/Track/Track.vue";
+import MusicLayout from "@/Layouts/MusicLayout.vue";
+import { Link } from "@inertiajs/vue3";
+import Track from "@/Components/Track/Track.vue";
 
 export default {
     components: {
@@ -43,21 +39,23 @@ export default {
     props: {
         tracks: Array,
     },
-    data(){
-        return{
-            search: '',
+    data() {
+        return {
+            search: "",
             audio: null,
             currentTrack: null,
-        }
+        };
     },
     computed: {
-        filteredTracks(){
-            return this.tracks.filter(track => track.title.toLowerCase().includes(this.search.toLowerCase()));
-        }
+        filteredTracks() {
+            return this.tracks.filter((track) =>
+                track.title.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
     },
     methods: {
         playAudio(track) {
-            const audioUrl = '/storage/'+ track.music;
+            const audioUrl = "/storage/" + track.music;
             if (!this.currentTrack) {
                 this.audio = new Audio(audioUrl);
                 this.audio.play();
@@ -71,11 +69,10 @@ export default {
                 this.audio.play();
             }
             this.currentTrack = track.uuid;
-            this.audio.addEventListener('ended', () => {
+            this.audio.addEventListener("ended", () => {
                 this.currentTrack = null;
             });
-        }
-    }
-
-}
+        },
+    },
+};
 </script>
